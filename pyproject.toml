@@ -1,0 +1,22 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "logsift"
+version = "0.1.0"
+description = "Investigate web server, Linux auth and AWS CloudTrail logs and report what an attacker did"
+readme = "README.md"
+license = { text = "MIT" }
+authors = [{ name = "MD Naved Raja Khan" }]
+requires-python = ">=3.10"
+keywords = ["security", "incident-response", "log-analysis", "cloudtrail", "blue-team"]
+
+[project.scripts]
+logsift = "logsift.cli:main"
+
+[project.urls]
+Homepage = "https://github.com/Naved124/logsift"
+
+[tool.setuptools]
+packages = ["logsift", "logsift.parsers", "logsift.detectors"]

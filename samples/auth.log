@@ -1,0 +1,42 @@
+Nov  7 09:05:00 web01 sshd[4001]: Accepted publickey for naved from 198.51.100.60 port 54640 ssh2: ED25519 SHA256:q3Zb7Kx1
+Nov  7 09:06:00 web01 sudo[4002]:    naved : TTY=pts/0 ; PWD=/home/naved ; USER=root ; COMMAND=/usr/bin/systemctl restart nginx
+Nov  7 09:20:00 web01 sshd[4005]: Invalid user admin from 198.51.100.23 port 44363
+Nov  7 09:20:01 web01 sshd[4006]: Failed password for invalid user admin from 198.51.100.23 port 35857 ssh2
+Nov  7 09:20:25 web01 sshd[4007]: Invalid user ubuntu from 198.51.100.23 port 30765
+Nov  7 09:20:26 web01 sshd[4008]: Failed password for invalid user ubuntu from 198.51.100.23 port 30114 ssh2
+Nov  7 09:20:50 web01 sshd[4009]: Invalid user test from 198.51.100.23 port 50279
+Nov  7 09:20:51 web01 sshd[4010]: Failed password for invalid user test from 198.51.100.23 port 46039 ssh2
+Nov  7 09:21:15 web01 sshd[4011]: Invalid user oracle from 198.51.100.23 port 45246
+Nov  7 09:21:16 web01 sshd[4012]: Failed password for invalid user oracle from 198.51.100.23 port 37708 ssh2
+Nov  7 09:21:40 web01 sshd[4013]: Invalid user postgres from 198.51.100.23 port 44641
+Nov  7 09:21:41 web01 sshd[4014]: Failed password for invalid user postgres from 198.51.100.23 port 55020 ssh2
+Nov  7 09:22:05 web01 sshd[4015]: Invalid user git from 198.51.100.23 port 50269
+Nov  7 09:22:06 web01 sshd[4016]: Failed password for invalid user git from 198.51.100.23 port 55558 ssh2
+Nov  7 09:22:30 web01 sshd[4017]: Invalid user ftpuser from 198.51.100.23 port 56836
+Nov  7 09:22:31 web01 sshd[4018]: Failed password for invalid user ftpuser from 198.51.100.23 port 45017 ssh2
+Nov  7 09:22:55 web01 sshd[4019]: Invalid user support from 198.51.100.23 port 57411
+Nov  7 09:22:56 web01 sshd[4020]: Failed password for invalid user support from 198.51.100.23 port 35884 ssh2
+Nov  7 10:10:00 web01 sshd[4021]: Failed password for deploy from 203.0.113.45 port 56559 ssh2
+Nov  7 10:10:06 web01 sshd[4022]: Failed password for deploy from 203.0.113.45 port 43118 ssh2
+Nov  7 10:10:09 web01 sshd[4023]: Failed password for deploy from 203.0.113.45 port 32199 ssh2
+Nov  7 10:10:13 web01 sshd[4024]: Failed password for deploy from 203.0.113.45 port 41749 ssh2
+Nov  7 10:10:19 web01 sshd[4025]: Failed password for deploy from 203.0.113.45 port 41971 ssh2
+Nov  7 10:10:22 web01 sshd[4026]: Failed password for deploy from 203.0.113.45 port 56289 ssh2
+Nov  7 10:10:28 web01 sshd[4027]: Failed password for deploy from 203.0.113.45 port 46526 ssh2
+Nov  7 10:10:35 web01 sshd[4028]: Failed password for deploy from 203.0.113.45 port 51531 ssh2
+Nov  7 10:10:38 web01 sshd[4029]: Failed password for deploy from 203.0.113.45 port 31332 ssh2
+Nov  7 10:10:46 web01 sshd[4030]: Failed password for deploy from 203.0.113.45 port 34268 ssh2
+Nov  7 10:10:49 web01 sshd[4031]: Failed password for deploy from 203.0.113.45 port 54034 ssh2
+Nov  7 10:10:54 web01 sshd[4032]: Failed password for deploy from 203.0.113.45 port 55481 ssh2
+Nov  7 10:11:02 web01 sshd[4033]: Failed password for deploy from 203.0.113.45 port 46760 ssh2
+Nov  7 10:11:05 web01 sshd[4034]: Failed password for deploy from 203.0.113.45 port 31778 ssh2
+Nov  7 10:11:14 web01 sshd[4035]: Failed password for deploy from 203.0.113.45 port 46512 ssh2
+Nov  7 10:11:20 web01 sshd[4036]: Failed password for deploy from 203.0.113.45 port 51389 ssh2
+Nov  7 10:11:29 web01 sshd[4037]: Failed password for deploy from 203.0.113.45 port 34462 ssh2
+Nov  7 10:11:32 web01 sshd[4038]: Failed password for deploy from 203.0.113.45 port 58084 ssh2
+Nov  7 10:11:35 web01 sshd[4039]: Accepted password for deploy from 203.0.113.45 port 51544 ssh2
+Nov  7 10:13:35 web01 sudo[4040]:   deploy : 3 incorrect password attempts ; TTY=pts/1 ; PWD=/home/deploy ; USER=root ; COMMAND=/usr/bin/cat /etc/shadow
+Nov  7 10:14:15 web01 sudo[4041]:   deploy : TTY=pts/1 ; PWD=/home/deploy ; USER=root ; COMMAND=/usr/bin/cat /home/deploy/.aws/credentials
+Nov  7 10:14:20 web01 CRON[4042]: pam_unix(cron:session): session opened for user root(uid=0) by (uid=0)
+Nov  7 12:05:00 web01 sshd[4003]: Accepted publickey for naved from 198.51.100.60 port 56501 ssh2: ED25519 SHA256:q3Zb7Kx1
+Nov  7 12:06:00 web01 sudo[4004]:    naved : TTY=pts/0 ; PWD=/home/naved ; USER=root ; COMMAND=/usr/bin/systemctl restart nginx

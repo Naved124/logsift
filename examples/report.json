@@ -1,0 +1,498 @@
+{
+  "generator": "logsift 0.1.0",
+  "generated": "2026-11-08T13:22:08.709627+00:00",
+  "inputs": [
+    {
+      "path": "samples/access.log",
+      "kind": "web",
+      "events": 347,
+      "skipped": 0
+    },
+    {
+      "path": "samples/auth.log",
+      "kind": "auth",
+      "events": 41,
+      "skipped": 1
+    },
+    {
+      "path": "samples/cloudtrail.json",
+      "kind": "cloudtrail",
+      "events": 18,
+      "skipped": 0
+    }
+  ],
+  "time_range": {
+    "first": "2026-11-07T09:00:00+05:30",
+    "last": "2026-11-07T12:59:17+05:30"
+  },
+  "actors": [
+    {
+      "ip": "203.0.113.45",
+      "severity": "critical",
+      "outcome": "succeeded",
+      "sources": [
+        "auth",
+        "cloudtrail",
+        "web"
+      ],
+      "users": [
+        "deploy",
+        "deploy-ci"
+      ],
+      "first_seen": "2026-11-07T09:40:00+05:30",
+      "last_seen": "2026-11-07T04:54:10+00:00",
+      "rule_ids": [
+        "WEB-006",
+        "WEB-007",
+        "WEB-005",
+        "WEB-001",
+        "WEB-003",
+        "AUTH-001",
+        "AUTH-003",
+        "CT-007",
+        "CT-004",
+        "CT-003",
+        "CT-005"
+      ]
+    },
+    {
+      "ip": "198.51.100.200",
+      "severity": "high",
+      "outcome": "succeeded",
+      "sources": [
+        "cloudtrail"
+      ],
+      "users": [
+        "root"
+      ],
+      "first_seen": "2026-11-07T04:20:00+00:00",
+      "last_seen": "2026-11-07T04:20:00+00:00",
+      "rule_ids": [
+        "CT-001",
+        "CT-002"
+      ]
+    },
+    {
+      "ip": "198.51.100.23",
+      "severity": "high",
+      "outcome": "no sign of success",
+      "sources": [
+        "auth"
+      ],
+      "users": [],
+      "first_seen": "2026-11-07T09:20:01+05:30",
+      "last_seen": "2026-11-07T09:22:56+05:30",
+      "rule_ids": [
+        "AUTH-002"
+      ]
+    },
+    {
+      "ip": "192.0.2.77",
+      "severity": "medium",
+      "outcome": "no sign of success",
+      "sources": [
+        "web"
+      ],
+      "users": [],
+      "first_seen": "2026-11-07T11:05:00+05:30",
+      "last_seen": "2026-11-07T11:06:00+05:30",
+      "rule_ids": [
+        "WEB-002"
+      ]
+    }
+  ],
+  "findings": [
+    {
+      "rule_id": "WEB-001",
+      "title": "SQL injection attempt",
+      "severity": "critical",
+      "source": "web",
+      "ip": "203.0.113.45",
+      "user": null,
+      "first_seen": "2026-11-07T09:45:30+05:30",
+      "last_seen": "2026-11-07T09:46:00+05:30",
+      "count": 6,
+      "outcome": "possible",
+      "description": "6 request(s) matched; response codes: 200, 500. 3 got a 2xx response, so check whether the payload was actually executed (response size, application logs).",
+      "evidence": [
+        "203.0.113.45 - - [07/Nov/2026:09:45:30 +0530] \"GET /products?id=12%20AND%201%3D1 HTTP/1.1\" 200 4100 \"-\" \"sqlmap/1.8.4#stable (https://sqlmap.org)\"",
+        "203.0.113.45 - - [07/Nov/2026:09:45:42 +0530] \"GET /products?id=12%20AND%20SLEEP(5) HTTP/1.1\" 200 4100 \"-\" \"sqlmap/1.8.4#stable (https://sqlmap.org)\"",
+        "203.0.113.45 - - [07/Nov/2026:09:45:54 +0530] \"GET /products?id=-1%20UNION%20ALL%20SELECT%20username,password,NULL%20FROM%20users--%20- HTTP/1.1\" 200 4100 \"-\" \"sqlmap/1.8.4#stable (https://sqlmap.org)\"",
+        "203.0.113.45 - - [07/Nov/2026:09:45:36 +0530] \"GET /products?id=12%27%20OR%20%271%27%3D%271 HTTP/1.1\" 500 210 \"-\" \"sqlmap/1.8.4#stable (https://sqlmap.org)\"",
+        "203.0.113.45 - - [07/Nov/2026:09:46:00 +0530] \"GET /products?id=12%20AND%20EXTRACTVALUE(1,CONCAT(0x7e,version())) HTTP/1.1\" 500 210 \"-\" \"sqlmap/1.8.4#stable (https://sqlmap.org)\""
+      ],
+      "details": {
+        "paths": [
+          "/products"
+        ],
+        "status_codes": [
+          "200",
+          "500"
+        ],
+        "successful_requests": 3
+      }
+    },
+    {
+      "rule_id": "AUTH-003",
+      "title": "Successful SSH login after repeated failures",
+      "severity": "critical",
+      "source": "auth",
+      "ip": "203.0.113.45",
+      "user": "deploy",
+      "first_seen": "2026-11-07T10:10:00+05:30",
+      "last_seen": "2026-11-07T10:11:35+05:30",
+      "count": 19,
+      "outcome": "succeeded",
+      "description": "'deploy' logged in via password after 18 failed attempts from the same IP. Treat the account as compromised until proven otherwise.",
+      "evidence": [
+        "Nov  7 10:11:20 web01 sshd[4036]: Failed password for deploy from 203.0.113.45 port 51389 ssh2",
+        "Nov  7 10:11:29 web01 sshd[4037]: Failed password for deploy from 203.0.113.45 port 34462 ssh2",
+        "Nov  7 10:11:32 web01 sshd[4038]: Failed password for deploy from 203.0.113.45 port 58084 ssh2",
+        "Nov  7 10:11:35 web01 sshd[4039]: Accepted password for deploy from 203.0.113.45 port 51544 ssh2"
+      ],
+      "details": {
+        "prior_failures": 18,
+        "method": "password"
+      }
+    },
+    {
+      "rule_id": "CT-003",
+      "title": "Logging or monitoring disabled",
+      "severity": "critical",
+      "source": "cloudtrail",
+      "ip": "203.0.113.45",
+      "user": "deploy-ci",
+      "first_seen": "2026-11-07T04:53:40+00:00",
+      "last_seen": "2026-11-07T04:53:40+00:00",
+      "count": 1,
+      "outcome": "succeeded",
+      "description": "StopLogging was called by 'deploy-ci'. Attackers do this to hide what they do next.",
+      "evidence": [
+        "{\"eventTime\":\"2026-11-07T04:53:40Z\",\"eventSource\":\"cloudtrail.amazonaws.com\",\"eventName\":\"StopLogging\",\"sourceIPAddress\":\"203.0.113.45\",\"principal\":\"deploy-ci\"}"
+      ],
+      "details": {
+        "request": {
+          "name": "arn:aws:cloudtrail:ap-south-1:111122223333:trail/main"
+        }
+      }
+    },
+    {
+      "rule_id": "AUTH-002",
+      "title": "SSH password spraying",
+      "severity": "high",
+      "source": "auth",
+      "ip": "198.51.100.23",
+      "user": null,
+      "first_seen": "2026-11-07T09:20:01+05:30",
+      "last_seen": "2026-11-07T09:22:56+05:30",
+      "count": 8,
+      "outcome": "failed",
+      "description": "8 failed SSH logins for 8 different usernames within 10 minutes.",
+      "evidence": [
+        "Nov  7 09:20:01 web01 sshd[4006]: Failed password for invalid user admin from 198.51.100.23 port 35857 ssh2",
+        "Nov  7 09:20:26 web01 sshd[4008]: Failed password for invalid user ubuntu from 198.51.100.23 port 30114 ssh2",
+        "Nov  7 09:20:51 web01 sshd[4010]: Failed password for invalid user test from 198.51.100.23 port 46039 ssh2",
+        "Nov  7 09:21:16 web01 sshd[4012]: Failed password for invalid user oracle from 198.51.100.23 port 37708 ssh2",
+        "Nov  7 09:22:56 web01 sshd[4020]: Failed password for invalid user support from 198.51.100.23 port 35884 ssh2"
+      ],
+      "details": {
+        "usernames": [
+          "admin",
+          "ftpuser",
+          "git",
+          "oracle",
+          "postgres",
+          "support",
+          "test",
+          "ubuntu"
+        ],
+        "total_failures": 8
+      }
+    },
+    {
+      "rule_id": "CT-001",
+      "title": "Root account used",
+      "severity": "high",
+      "source": "cloudtrail",
+      "ip": "198.51.100.200",
+      "user": "root",
+      "first_seen": "2026-11-07T04:20:00+00:00",
+      "last_seen": "2026-11-07T04:20:00+00:00",
+      "count": 1,
+      "outcome": "succeeded",
+      "description": "The root user called ConsoleLogin. Root should only be used for the few tasks that require it.",
+      "evidence": [
+        "{\"eventTime\":\"2026-11-07T04:20:00Z\",\"eventSource\":\"signin.amazonaws.com\",\"eventName\":\"ConsoleLogin\",\"sourceIPAddress\":\"198.51.100.200\",\"principal\":\"root\"}"
+      ],
+      "details": {}
+    },
+    {
+      "rule_id": "CT-002",
+      "title": "Console login without MFA",
+      "severity": "high",
+      "source": "cloudtrail",
+      "ip": "198.51.100.200",
+      "user": "root",
+      "first_seen": "2026-11-07T04:20:00+00:00",
+      "last_seen": "2026-11-07T04:20:00+00:00",
+      "count": 1,
+      "outcome": "succeeded",
+      "description": "'root' signed in to the AWS console without MFA.",
+      "evidence": [
+        "{\"eventTime\":\"2026-11-07T04:20:00Z\",\"eventSource\":\"signin.amazonaws.com\",\"eventName\":\"ConsoleLogin\",\"sourceIPAddress\":\"198.51.100.200\",\"principal\":\"root\"}"
+      ],
+      "details": {}
+    },
+    {
+      "rule_id": "WEB-003",
+      "title": "Path traversal / local file read attempt",
+      "severity": "high",
+      "source": "web",
+      "ip": "203.0.113.45",
+      "user": null,
+      "first_seen": "2026-11-07T10:02:00+05:30",
+      "last_seen": "2026-11-07T10:02:00+05:30",
+      "count": 1,
+      "outcome": "failed",
+      "description": "1 request(s) matched; response codes: 400.",
+      "evidence": [
+        "203.0.113.45 - - [07/Nov/2026:10:02:00 +0530] \"GET /download?file=..%2F..%2F..%2Fetc%2Fpasswd HTTP/1.1\" 400 157 \"-\" \"curl/8.5.0\""
+      ],
+      "details": {
+        "paths": [
+          "/download"
+        ],
+        "status_codes": [
+          "400"
+        ],
+        "successful_requests": 0
+      }
+    },
+    {
+      "rule_id": "AUTH-001",
+      "title": "SSH brute force",
+      "severity": "high",
+      "source": "auth",
+      "ip": "203.0.113.45",
+      "user": "deploy",
+      "first_seen": "2026-11-07T10:10:00+05:30",
+      "last_seen": "2026-11-07T10:11:32+05:30",
+      "count": 18,
+      "outcome": "succeeded",
+      "description": "18 failed SSH logins within 10 minutes, mostly for 'deploy'.",
+      "evidence": [
+        "Nov  7 10:10:00 web01 sshd[4021]: Failed password for deploy from 203.0.113.45 port 56559 ssh2",
+        "Nov  7 10:10:06 web01 sshd[4022]: Failed password for deploy from 203.0.113.45 port 43118 ssh2",
+        "Nov  7 10:10:09 web01 sshd[4023]: Failed password for deploy from 203.0.113.45 port 32199 ssh2",
+        "Nov  7 10:10:13 web01 sshd[4024]: Failed password for deploy from 203.0.113.45 port 41749 ssh2",
+        "Nov  7 10:11:32 web01 sshd[4038]: Failed password for deploy from 203.0.113.45 port 58084 ssh2"
+      ],
+      "details": {
+        "usernames": [
+          "deploy"
+        ],
+        "total_failures": 18
+      }
+    },
+    {
+      "rule_id": "CT-004",
+      "title": "IAM change",
+      "severity": "high",
+      "source": "cloudtrail",
+      "ip": "203.0.113.45",
+      "user": "deploy-ci",
+      "first_seen": "2026-11-07T04:53:00+00:00",
+      "last_seen": "2026-11-07T04:53:00+00:00",
+      "count": 1,
+      "outcome": "succeeded",
+      "description": "'deploy-ci' called CreateAccessKey on 'deploy-ci'.",
+      "evidence": [
+        "{\"eventTime\":\"2026-11-07T04:53:00Z\",\"eventSource\":\"iam.amazonaws.com\",\"eventName\":\"CreateAccessKey\",\"sourceIPAddress\":\"203.0.113.45\",\"principal\":\"deploy-ci\"}"
+      ],
+      "details": {
+        "event": "CreateAccessKey",
+        "target": "deploy-ci",
+        "request": {
+          "userName": "deploy-ci"
+        }
+      }
+    },
+    {
+      "rule_id": "CT-005",
+      "title": "Security group opened to the internet",
+      "severity": "high",
+      "source": "cloudtrail",
+      "ip": "203.0.113.45",
+      "user": "deploy-ci",
+      "first_seen": "2026-11-07T04:54:10+00:00",
+      "last_seen": "2026-11-07T04:54:10+00:00",
+      "count": 1,
+      "outcome": "succeeded",
+      "description": "'deploy-ci' allowed tcp/22 from 0.0.0.0/0, tcp/3306 from 0.0.0.0/0 on sg-0abc1234def567890.",
+      "evidence": [
+        "{\"eventTime\":\"2026-11-07T04:54:10Z\",\"eventSource\":\"ec2.amazonaws.com\",\"eventName\":\"AuthorizeSecurityGroupIngress\",\"sourceIPAddress\":\"203.0.113.45\",\"principal\":\"deploy-ci\"}"
+      ],
+      "details": {
+        "group_id": "sg-0abc1234def567890",
+        "rules": [
+          "tcp/22 from 0.0.0.0/0",
+          "tcp/3306 from 0.0.0.0/0"
+        ]
+      }
+    },
+    {
+      "rule_id": "WEB-006",
+      "title": "Known scanner user agent",
+      "severity": "medium",
+      "source": "web",
+      "ip": "203.0.113.45",
+      "user": null,
+      "first_seen": "2026-11-07T09:40:00+05:30",
+      "last_seen": "2026-11-07T09:46:00+05:30",
+      "count": 80,
+      "outcome": "unknown",
+      "description": "80 request(s) sent by gobuster, sqlmap.",
+      "evidence": [
+        "203.0.113.45 - - [07/Nov/2026:09:40:00 +0530] \"GET /api80 HTTP/1.1\" 404 153 \"-\" \"gobuster/3.6\"",
+        "203.0.113.45 - - [07/Nov/2026:09:40:02 +0530] \"GET /config10 HTTP/1.1\" 404 153 \"-\" \"gobuster/3.6\"",
+        "203.0.113.45 - - [07/Nov/2026:09:40:04 +0530] \"GET /uploads5 HTTP/1.1\" 404 153 \"-\" \"gobuster/3.6\"",
+        "203.0.113.45 - - [07/Nov/2026:09:40:06 +0530] \"GET /server71 HTTP/1.1\" 404 153 \"-\" \"gobuster/3.6\"",
+        "203.0.113.45 - - [07/Nov/2026:09:46:00 +0530] \"GET /products?id=12%20AND%20EXTRACTVALUE(1,CONCAT(0x7e,version())) HTTP/1.1\" 500 210 \"-\" \"sqlmap/1.8.4#stable (https://sqlmap.org)\""
+      ],
+      "details": {
+        "tools": [
+          "gobuster",
+          "sqlmap"
+        ]
+      }
+    },
+    {
+      "rule_id": "WEB-007",
+      "title": "Content discovery (directory brute force)",
+      "severity": "medium",
+      "source": "web",
+      "ip": "203.0.113.45",
+      "user": null,
+      "first_seen": "2026-11-07T09:40:00+05:30",
+      "last_seen": "2026-11-07T09:42:24+05:30",
+      "count": 72,
+      "outcome": "unknown",
+      "description": "72 requests returned 404 within 5 minutes.",
+      "evidence": [
+        "203.0.113.45 - - [07/Nov/2026:09:40:00 +0530] \"GET /api80 HTTP/1.1\" 404 153 \"-\" \"gobuster/3.6\"",
+        "203.0.113.45 - - [07/Nov/2026:09:40:02 +0530] \"GET /config10 HTTP/1.1\" 404 153 \"-\" \"gobuster/3.6\"",
+        "203.0.113.45 - - [07/Nov/2026:09:40:04 +0530] \"GET /uploads5 HTTP/1.1\" 404 153 \"-\" \"gobuster/3.6\"",
+        "203.0.113.45 - - [07/Nov/2026:09:40:06 +0530] \"GET /server71 HTTP/1.1\" 404 153 \"-\" \"gobuster/3.6\"",
+        "203.0.113.45 - - [07/Nov/2026:09:42:24 +0530] \"GET /backup.zip HTTP/1.1\" 404 153 \"-\" \"gobuster/3.6\""
+      ],
+      "details": {}
+    },
+    {
+      "rule_id": "WEB-005",
+      "title": "Probe for sensitive files",
+      "severity": "medium",
+      "source": "web",
+      "ip": "203.0.113.45",
+      "user": null,
+      "first_seen": "2026-11-07T09:42:20+05:30",
+      "last_seen": "2026-11-07T09:42:24+05:30",
+      "count": 3,
+      "outcome": "failed",
+      "description": "3 request(s) matched; response codes: 403, 404.",
+      "evidence": [
+        "203.0.113.45 - - [07/Nov/2026:09:42:20 +0530] \"GET /.env HTTP/1.1\" 403 162 \"-\" \"gobuster/3.6\"",
+        "203.0.113.45 - - [07/Nov/2026:09:42:22 +0530] \"GET /.git/config HTTP/1.1\" 404 153 \"-\" \"gobuster/3.6\"",
+        "203.0.113.45 - - [07/Nov/2026:09:42:24 +0530] \"GET /backup.zip HTTP/1.1\" 404 153 \"-\" \"gobuster/3.6\""
+      ],
+      "details": {
+        "paths": [
+          "/.env",
+          "/.git/config",
+          "/backup.zip"
+        ],
+        "status_codes": [
+          "403",
+          "404"
+        ],
+        "successful_requests": 0
+      }
+    },
+    {
+      "rule_id": "CT-007",
+      "title": "Burst of access-denied API calls",
+      "severity": "medium",
+      "source": "cloudtrail",
+      "ip": "203.0.113.45",
+      "user": "deploy-ci",
+      "first_seen": "2026-11-07T04:50:00+00:00",
+      "last_seen": "2026-11-07T04:52:45+00:00",
+      "count": 9,
+      "outcome": "unknown",
+      "description": "'deploy-ci' was denied 9 times across 9 API call(s). This pattern is typical of someone enumerating what stolen credentials can do.",
+      "evidence": [
+        "{\"eventTime\":\"2026-11-07T04:50:00Z\",\"eventSource\":\"iam.amazonaws.com\",\"eventName\":\"ListUsers\",\"sourceIPAddress\":\"203.0.113.45\",\"errorCode\":\"AccessDenied\",\"principal\":\"deploy-ci\"}",
+        "{\"eventTime\":\"2026-11-07T04:50:15Z\",\"eventSource\":\"iam.amazonaws.com\",\"eventName\":\"ListRoles\",\"sourceIPAddress\":\"203.0.113.45\",\"errorCode\":\"AccessDenied\",\"principal\":\"deploy-ci\"}",
+        "{\"eventTime\":\"2026-11-07T04:50:30Z\",\"eventSource\":\"iam.amazonaws.com\",\"eventName\":\"GetAccountAuthorizationDetails\",\"sourceIPAddress\":\"203.0.113.45\",\"errorCode\":\"AccessDenied\",\"principal\":\"deploy-ci\"}",
+        "{\"eventTime\":\"2026-11-07T04:50:45Z\",\"eventSource\":\"s3.amazonaws.com\",\"eventName\":\"ListBuckets\",\"sourceIPAddress\":\"203.0.113.45\",\"errorCode\":\"AccessDenied\",\"principal\":\"deploy-ci\"}",
+        "{\"eventTime\":\"2026-11-07T04:52:45Z\",\"eventSource\":\"iam.amazonaws.com\",\"eventName\":\"ListPolicies\",\"sourceIPAddress\":\"203.0.113.45\",\"errorCode\":\"AccessDenied\",\"principal\":\"deploy-ci\"}"
+      ],
+      "details": {
+        "api_calls": [
+          "DescribeDBInstances",
+          "GetAccountAuthorizationDetails",
+          "GetSecretValue",
+          "ListBuckets",
+          "ListFunctions20150331",
+          "ListPolicies",
+          "ListRoles",
+          "ListSecrets",
+          "ListUsers"
+        ]
+      }
+    },
+    {
+      "rule_id": "WEB-002",
+      "title": "Cross-site scripting attempt",
+      "severity": "medium",
+      "source": "web",
+      "ip": "192.0.2.77",
+      "user": null,
+      "first_seen": "2026-11-07T11:05:00+05:30",
+      "last_seen": "2026-11-07T11:06:00+05:30",
+      "count": 3,
+      "outcome": "failed",
+      "description": "3 request(s) matched; response codes: 403.",
+      "evidence": [
+        "192.0.2.77 - - [07/Nov/2026:11:05:00 +0530] \"GET /search?q=%3Cscript%3Ealert(1)%3C/script%3E HTTP/1.1\" 403 162 \"-\" \"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0 Safari/537.36\"",
+        "192.0.2.77 - - [07/Nov/2026:11:05:30 +0530] \"GET /search?q=%22%3E%3Cimg%20src%3Dx%20onerror%3Dalert(document.cookie)%3E HTTP/1.1\" 403 162 \"-\" \"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0 Safari/537.36\"",
+        "192.0.2.77 - - [07/Nov/2026:11:06:00 +0530] \"GET /search?q=javascript:alert(1) HTTP/1.1\" 403 162 \"-\" \"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0 Safari/537.36\""
+      ],
+      "details": {
+        "paths": [
+          "/search"
+        ],
+        "status_codes": [
+          "403"
+        ],
+        "successful_requests": 0
+      }
+    },
+    {
+      "rule_id": "AUTH-005",
+      "title": "Failed sudo authentication",
+      "severity": "low",
+      "source": "auth",
+      "ip": null,
+      "user": "deploy",
+      "first_seen": "2026-11-07T10:13:35+05:30",
+      "last_seen": "2026-11-07T10:13:35+05:30",
+      "count": 1,
+      "outcome": "unknown",
+      "description": "'deploy' failed sudo authentication 1 time(s).",
+      "evidence": [
+        "Nov  7 10:13:35 web01 sudo[4040]:   deploy : 3 incorrect password attempts ; TTY=pts/1 ; PWD=/home/deploy ; USER=root ; COMMAND=/usr/bin/cat /etc/shadow"
+      ],
+      "details": {}
+    }
+  ]
+}
